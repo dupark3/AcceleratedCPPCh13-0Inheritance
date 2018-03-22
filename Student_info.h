@@ -5,24 +5,40 @@
 #include <vector>
 #include <string>
 
-class Student_info{
+class Core{
 public:
-    Student_info(); // default constructor
-    Student_info(std::istream&); // constructor with argument
+    Core(); 
+    Core(std::istream&); 
+    std::string name() const { return n; };
     std::istream& read(std::istream&);
-    std::string name() const { return n; }; // accessor
-    std::string letterGrade() const; // accessor
-
+    double grade() const;
+    // std::string letterGrade() const; 
+protected:
+    std::istream& read_common(std::istream&);
+    double midterm, final;
+    std::vector<double> homework;
 private:
     std::string n;
-    double midterm;
-    double final;
-    std::vector<double> homework;
-    // double homework[];
-    double finalGrade;
+    
 };
 
-template <class container>
+class Grad: public Core {
+public:
+    Grad();
+    Grad(std::istream&);
+    std::istream read(std::istream&);
+    double grade() const;
+private:
+    double thesis;
+};
+
+    /*********************
+    * NON MEMBER CLASSES *
+    **********************/
+
+double grade(double, double, const std::vector<double>&);
+
+template <class container> 
 std::istream& read_hw(std::istream& is, container& c){
     if (is){
         c.clear();
