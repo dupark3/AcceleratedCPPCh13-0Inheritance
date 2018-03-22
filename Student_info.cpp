@@ -1,6 +1,7 @@
 #include <algorithm> // sort, min
 #include <iostream>
 #include <cstdio> // EOF
+#include <stdexcept> // domain_error
 #include <string>
 
 #include "Student_info.h"
@@ -39,12 +40,14 @@ double Grad::grade(){
     * NON MEMBER CLASSES *
     **********************/
 
-double ::grade(double midterm, 
-               double final, 
-               const std::vector<double>& homework){
+double ::grade(double midterm, double final, const std::vector<double>& homework){
+    if (homework.size() == 0)
+        throw std::domain_error("student has done no homework");
+    
+    // Use nonmember template function median (defined in Student_info.h) to calculate grade
     double hw_median = 0;
-    // definition to nonmember template function median in Student_info.h 
-    ::median(homework.begin(), homework.end(), hw_median); 
+    median(homework.begin(), homework.end(), hw_median); 
+
     return (midterm * 0.2) + (final * 0.4) + (hw_median * 0.4);
 }
 
