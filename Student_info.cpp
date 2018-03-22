@@ -44,8 +44,8 @@ double ::grade(double midterm,
     return (midterm * 0.2) + (final * 0.4) + (hw_median * 0.4);
 }
 
-bool compare(const Student_info& x, const Student_info& y){
-    return x.name() < y.name();
+bool compare(const Compare& c1, const Compare& c2){
+    return c1.name() < c2.name();
 }
 
 /*

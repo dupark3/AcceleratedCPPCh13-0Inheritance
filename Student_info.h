@@ -7,8 +7,8 @@
 
 class Core{
 public:
-    Core(); 
-    Core(std::istream&); 
+    Core() : midterm(0), final(0) { } 
+    Core(std::istream& is) : { read(is) } 
     std::string name() const { return n; };
     std::istream& read(std::istream&);
     double grade() const;
@@ -24,8 +24,8 @@ private:
 
 class Grad: public Core {
 public:
-    Grad();
-    Grad(std::istream&);
+    Grad() : thesis(0) { }
+    Grad(std::istream& is) { read(is) }
     std::istream read(std::istream&);
     double grade() const;
 private:
@@ -66,7 +66,7 @@ void median(inputIter first, inputIter last, T& init){
     size % 2 == 0 ? init = (temp[mid - 1] + temp[mid]) / 2 : init = temp[mid];
 };
 
-bool compare(const Student_info&, const Student_info&);
+bool compare(const Core&, const Core&);
 
 #endif // GUARD_student_info_h
 
