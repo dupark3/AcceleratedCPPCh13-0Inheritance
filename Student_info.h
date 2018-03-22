@@ -7,13 +7,13 @@
 
 class Core{
 public:
-    Core() : midterm(0), final(0) { } 
-    Core(std::istream& is) : { read(is) } 
-    
+    Core() : midterm(0), final(0) { }
+    Core(std::istream& is) { read(is); }
+
     std::string name() const { return n; };
-    
+
     virtual std::istream& read(std::istream&);
-    virtual double grade() const; 
+    virtual double grade() const;
 protected:
     std::istream& read_common(std::istream&);
     double midterm, final;
@@ -25,10 +25,10 @@ private:
 class Grad: public Core {
 public:
     Grad() : thesis(0) { }
-    Grad(std::istream& is) { read(is) }
+    Grad(std::istream& is) { read(is); }
 
-    std::istream read(std::istream&); // inherits virtual-ness from Core::read()
-    double grade() const; // inherits virtual-ness from Core::grade()
+    std::istream& read(std::istream&); // inherits virtual-ness from Core::read()
+    double grade(); // inherits virtual-ness from Core::grade()
 private:
     double thesis;
 };
@@ -37,10 +37,11 @@ private:
     * NON MEMBER CLASSES *
     **********************/
 bool compare(const Core&, const Core&);
+bool compare_Core_pointers(const Core*, const Core*);
 bool compare_grades(const Core&, const Core&);
 double grade(double, double, const std::vector<double>&);
 
-template <class container> 
+template <class container>
 std::istream& read_hw(std::istream& is, container& c){
     if (is){
         c.clear();
