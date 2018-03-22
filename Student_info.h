@@ -9,25 +9,26 @@ class Core{
 public:
     Core() : midterm(0), final(0) { } 
     Core(std::istream& is) : { read(is) } 
+    
     std::string name() const { return n; };
-    std::istream& read(std::istream&);
-    double grade() const;
-    // std::string letterGrade() const; 
+    
+    virtual std::istream& read(std::istream&);
+    virtual double grade() const; 
 protected:
     std::istream& read_common(std::istream&);
     double midterm, final;
     std::vector<double> homework;
 private:
     std::string n;
-    
 };
 
 class Grad: public Core {
 public:
     Grad() : thesis(0) { }
     Grad(std::istream& is) { read(is) }
-    std::istream read(std::istream&);
-    double grade() const;
+
+    std::istream read(std::istream&); // inherits virtual-ness from Core::read()
+    double grade() const; // inherits virtual-ness from Core::grade()
 private:
     double thesis;
 };
@@ -35,7 +36,8 @@ private:
     /*********************
     * NON MEMBER CLASSES *
     **********************/
-
+bool compare(const Core&, const Core&);
+bool compare_grades(const Core&, const Core&);
 double grade(double, double, const std::vector<double>&);
 
 template <class container> 
@@ -52,7 +54,7 @@ std::istream& read_hw(std::istream& is, container& c){
 
 template <class inputIter, class T>
 void median(inputIter first, inputIter last, T& init){
-    // in order to find the median, we need to sort, but we don't want to change the container itself, so we copy the elements and then sort
+    // make copy of vector to avoid altering the original vector
     std::vector<T> temp;
     while(first != last){
         temp.push_back(*first);
@@ -66,7 +68,6 @@ void median(inputIter first, inputIter last, T& init){
     size % 2 == 0 ? init = (temp[mid - 1] + temp[mid]) / 2 : init = temp[mid];
 };
 
-bool compare(const Core&, const Core&);
 
 #endif // GUARD_student_info_h
 

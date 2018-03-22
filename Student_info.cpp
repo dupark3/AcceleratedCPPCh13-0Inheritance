@@ -35,6 +35,10 @@ double Grad::grade(){
     return std::min(Core::grade(), thesis);
 }
 
+    /*********************
+    * NON MEMBER CLASSES *
+    **********************/
+
 double ::grade(double midterm, 
                double final, 
                const std::vector<double>& homework){
@@ -44,22 +48,12 @@ double ::grade(double midterm,
     return (midterm * 0.2) + (final * 0.4) + (hw_median * 0.4);
 }
 
-bool compare(const Compare& c1, const Compare& c2){
+bool compare(const Core& c1, const Core& c2){
     return c1.name() < c2.name();
 }
 
-/*
-std::string Student_info::letterGrade() const{
-    // static const variables of letter grade benchmarks, corresponding letter grades, and number of grades
-    static const double  numbers[] = {97, 94, 90, 87, 84, 80, 77, 74, 70, 60, 0};
-    static const char* const letters[] = {"A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D", "F"};
-    static const size_t numberSize = sizeof(numbers) / sizeof(*numbers);
-
-    for (size_t i = 0; i != numberSize; ++i){
-        if (finalGrade >= numbers[i]){
-            return letters[i];
-        }
-    }
-
-    return "?\?\?";
-}*/
+bool compare_grades(const Core& c1, const Core& c2){
+    // grade function is virtual, so compiler will decide if a Core object or Grad reference has been passed 
+    // and call the appropriate grade() function
+    return c1.grade() < c2.grade(); 
+}
