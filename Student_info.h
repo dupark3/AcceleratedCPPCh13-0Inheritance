@@ -13,7 +13,7 @@ public:
     std::string name() const { return n; };
 
     virtual std::istream& read(std::istream&);
-    virtual double grade() const;
+    virtual double grade();
 protected:
     std::istream& read_common(std::istream&);
     double midterm, final;

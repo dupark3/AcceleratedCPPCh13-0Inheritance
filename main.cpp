@@ -47,7 +47,7 @@ int main() {
             double final_grade = students[i]->grade(); // Core::grade
             std::streamsize prec = std::cout.precision();
             std::cout << std::setprecision(3) << final_grade
-                 << std::setprecision(prec) << std::endl;
+                      << std::setprecision(prec) << std::endl;
         } catch (std::domain_error e) {
             std::cout << e.what() << std::endl;
         }

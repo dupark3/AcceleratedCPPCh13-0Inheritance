@@ -17,7 +17,7 @@ std::istream& Core::read(std::istream& in){
     return in;
 }
 
-double Core::grade() const{
+double Core::grade(){
     return ::grade(midterm, final, homework);
 }
 
@@ -56,8 +56,9 @@ bool compare_Core_pointers(const Core* cp1, const Core* cp2){
     return compare(*cp1, *cp2);
 }
 
-bool compare_grades(const Core& c1, const Core& c2){
+/*bool compare_grades(const Core& c1, const Core& c2){
     // grade function is virtual, so compiler will decide if a Core object or Grad reference has been passed
     // and call the appropriate grade() function
     return c1.grade() < c2.grade();
 }
+*/
