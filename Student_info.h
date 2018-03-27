@@ -1,11 +1,39 @@
 #ifndef GUARD_student_info_h
 #define GUARD_student_info_h
 
+#include <stdexcept> // runtime_error
 #include <iostream>
 #include <vector>
 #include <string>
 
+// handle class
+class Student_info{
+public:
+    Student_info() : cp(0) { }
+    Student_info(std::istream& is) : cp(0) { read(is) }
+    Student_info(const Student_info&);
+    Student_info& operator= (const Student_info&);
+    ~Student_info() { delete cp; }
+
+    std::istream& read(std::istream&);
+    std::string name() const{
+        if(cp) return cp->name();
+        else throw std::runtime_error("Cannot find name of uninitialized student");
+    }
+    double grade() const{
+        if(cp) return cp->grade();
+        else throw std::runtime_error("Cannot find grade of uninitialized student");
+    }
+    static bool compare(const Student_info& s1, const Student_info& s2){
+        return compare(s1.name(), s2.name());
+    }
+
+private:
+    Core* cp;
+};
+
 class Core{
+friend class Student_info;
 public:
     Core() : midterm(0), final(0) { }
     Core(std::istream& is) { read(is); }
@@ -13,7 +41,7 @@ public:
     std::string name() const { return n; };
 
     virtual std::istream& read(std::istream&);
-    virtual double grade();
+    virtual double grade() const;
 protected:
     std::istream& read_common(std::istream&);
     double midterm, final;
@@ -28,7 +56,7 @@ public:
     Grad(std::istream& is) { read(is); }
 
     std::istream& read(std::istream&); // inherits virtual-ness from Core::read()
-    double grade(); // inherits virtual-ness from Core::grade()
+    double grade() const; // inherits virtual-ness from Core::grade()
 private:
     double thesis;
 };

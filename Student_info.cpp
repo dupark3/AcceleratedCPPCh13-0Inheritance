@@ -6,6 +6,17 @@
 
 #include "Student_info.h"
 
+std::istream& Student_info::read(std::istream& in){
+    delete cp;
+
+    char ch;
+    in >> ch;
+    if (ch == 'U') cp = new Core(in);
+    else if (ch == 'G') cp = new Grad(in);
+
+    return in;
+}
+
 std::istream& Core::read_common(std::istream& in){
     in >> n >> midterm >> final;
     return in;
@@ -17,7 +28,7 @@ std::istream& Core::read(std::istream& in){
     return in;
 }
 
-double Core::grade(){
+double Core::grade() const{
     return ::grade(midterm, final, homework);
 }
 
@@ -28,7 +39,7 @@ std::istream& Grad::read(std::istream& in){
     return in;
 }
 
-double Grad::grade(){
+double Grad::grade() const{
     // grading policy is the minimum between regular grade and thesis grade
     return std::min(Core::grade(), thesis);
 }
