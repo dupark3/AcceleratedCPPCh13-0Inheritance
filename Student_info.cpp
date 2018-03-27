@@ -37,7 +37,6 @@ std::istream& Student_info::read(std::istream& in){
 }
 
 
-
     /**********************
     * CORE MEMBER CLASSES *
     ***********************/
@@ -91,10 +90,3 @@ double grade(double midterm, double final, const std::vector<double>& homework){
 bool compare(const std::string& s1, const std::string& s2){
     return s1 < s2;
 }
-
-/*bool compare_grades(const Core& c1, const Core& c2){
-    // grade function is virtual, so compiler will decide if a Core object or Grad reference has been passed
-    // and call the appropriate grade() function
-    return c1.grade() < c2.grade();
-}
-*/

@@ -12,8 +12,11 @@ bool compare(const std::string&, const std::string&);
 class Core{
 friend class Student_info;
 public:
-    Core() : midterm(0), final(0) { }
-    Core(std::istream& is) { read(is); }
+    Core() : midterm(0), final(0) { std::cerr << "Core::Core()" << std::endl; }
+    Core(std::istream& is) {
+        read(is);
+        std::cerr << "Core::Core(istream&)" << std::endl;
+    }
 
     std::string name() const { return n; };
 
@@ -30,8 +33,11 @@ private:
 
 class Grad: public Core {
 public:
-    Grad() : thesis(0) { }
-    Grad(std::istream& is) { read(is); }
+    Grad() : thesis(0) { std::cerr << "Grad::Grad()" << std::endl; }
+    Grad(std::istream& is) {
+        read(is);
+        std::cerr << "Grad::Grad(istream&)" << std::endl;
+    }
 
     std::istream& read(std::istream&); // inherits virtual-ness from Core::read()
     double grade() const; // inherits virtual-ness from Core::grade()
@@ -40,7 +46,6 @@ protected:
 private:
     double thesis;
 };
-
 
 // handle class
 class Student_info{

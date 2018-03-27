@@ -20,11 +20,11 @@ typedef std::string::size_type string_size;
 int main() {
     std::cout << "Enter each student's status (U or G), name, midterm grade, final grade, and homework grades: " << std::endl;
 
-    std::vector<Student_info> students;
-    Student_info record;
+    // object of the handle class, dynamically allocates, deallocates, and calls virtual functions
+    std::vector<Student_info> students; 
+    Student_info record; 
     string_size maxLen = 0;
-    char ch;
-
+    
     // call handle's read function, which allocates appropriate object
     while(record.read(std::cin)){
         maxLen = std::max(maxLen, record.name().size());
