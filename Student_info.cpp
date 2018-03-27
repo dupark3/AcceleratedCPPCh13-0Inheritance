@@ -6,6 +6,25 @@
 
 #include "Student_info.h"
 
+    /******************************
+    * STUDENT_INFO MEMBER CLASSES *
+    *******************************/
+
+Student_info::Student_info(const Student_info& s) : cp(0){
+    if (s.cp) cp = s.cp->clone();
+}
+
+Student_info& Student_info::operator=(const Student_info& s){
+    if (&s != this){
+        delete cp;
+        if (s.cp)
+            cp = s.cp->clone();
+        else
+            cp = 0;
+    }
+    return *this;
+}
+
 std::istream& Student_info::read(std::istream& in){
     delete cp;
 
@@ -16,6 +35,10 @@ std::istream& Student_info::read(std::istream& in){
 
     return in;
 }
+
+    /**********************
+    * CORE MEMBER CLASSES *
+    ***********************/
 
 std::istream& Core::read_common(std::istream& in){
     in >> n >> midterm >> final;
@@ -31,6 +54,10 @@ std::istream& Core::read(std::istream& in){
 double Core::grade() const{
     return ::grade(midterm, final, homework);
 }
+
+    /**********************
+    * GRAD MEMBER CLASSES *
+    ***********************/
 
 std::istream& Grad::read(std::istream& in){
     Core::read_common(in);

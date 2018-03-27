@@ -43,6 +43,7 @@ public:
     virtual std::istream& read(std::istream&);
     virtual double grade() const;
 protected:
+    virtual Core* clone() const { return new Core(*this); }
     std::istream& read_common(std::istream&);
     double midterm, final;
     std::vector<double> homework;
@@ -57,6 +58,8 @@ public:
 
     std::istream& read(std::istream&); // inherits virtual-ness from Core::read()
     double grade() const; // inherits virtual-ness from Core::grade()
+protected:
+    Grad* clone() const { return new Grad(*this); } // Student_info can access this clone function through a virtual call of Core::clone
 private:
     double thesis;
 };
