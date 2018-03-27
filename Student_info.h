@@ -85,8 +85,11 @@ std::istream& read_hw(std::istream& is, container& c){
     if (is){
         c.clear();
         double x;
-        while (is >> x)
+        while (is.peek() != '\n'){
+            is >> x;
             c.push_back(x);
+        }
+            
         is.clear();
     }
     return is;
