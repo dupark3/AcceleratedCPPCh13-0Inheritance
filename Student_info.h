@@ -6,31 +6,8 @@
 #include <vector>
 #include <string>
 
-// handle class
-class Student_info{
-public:
-    Student_info() : cp(0) { }
-    Student_info(std::istream& is) : cp(0) { read(is) }
-    Student_info(const Student_info&);
-    Student_info& operator= (const Student_info&);
-    ~Student_info() { delete cp; }
-
-    std::istream& read(std::istream&);
-    std::string name() const{
-        if(cp) return cp->name();
-        else throw std::runtime_error("Cannot find name of uninitialized student");
-    }
-    double grade() const{
-        if(cp) return cp->grade();
-        else throw std::runtime_error("Cannot find grade of uninitialized student");
-    }
-    static bool compare(const Student_info& s1, const Student_info& s2){
-        return compare(s1.name(), s2.name());
-    }
-
-private:
-    Core* cp;
-};
+// forward declaration of compare
+bool compare(const std::string&, const std::string&);
 
 class Core{
 friend class Student_info;
@@ -64,11 +41,37 @@ private:
     double thesis;
 };
 
+
+// handle class
+class Student_info{
+public:
+    Student_info() : cp(0) { }
+    Student_info(std::istream& is) : cp(0) { read(is); }
+    Student_info(const Student_info&);
+    Student_info& operator= (const Student_info&);
+    ~Student_info() { delete cp; }
+
+    std::istream& read(std::istream&);
+    std::string name() const{
+        if(cp) return cp->name();
+        else throw std::runtime_error("Cannot find name of uninitialized student");
+    }
+    double grade() const{
+        if(cp) return cp->grade();
+        else throw std::runtime_error("Cannot find grade of uninitialized student");
+    }
+    static bool compare(const Student_info& s1, const Student_info& s2){
+        return ::compare(s1.name(), s2.name());
+    }
+
+private:
+    Core* cp;
+};
+
     /*********************
     * NON MEMBER CLASSES *
     **********************/
-bool compare(const Core&, const Core&);
-bool compare_Core_pointers(const Core*, const Core*);
+bool compare(const std::string&, const std::string&);
 bool compare_grades(const Core&, const Core&);
 double grade(double, double, const std::vector<double>&);
 

@@ -20,38 +20,32 @@ typedef std::string::size_type string_size;
 int main() {
     std::cout << "Enter each student's status (U or G), name, midterm grade, final grade, and homework grades: " << std::endl;
 
-    std::vector<Core*> students;
-    Core* record;
+    std::vector<Student_info> students;
+    Student_info record;
     string_size maxLen = 0;
     char ch;
 
-    // read and store the data
-    while(std::cin >> ch){
-        if (ch == 'U')
-            record = new Core;
-        else if (ch == 'G')
-            record = new Grad;
-        record->read(std::cin); // virtual call to read
-        maxLen = std::max(maxLen, record->name().size());
+    // call handle's read function, which allocates appropriate object
+    while(record.read(std::cin)){
+        maxLen = std::max(maxLen, record.name().size());
         students.push_back(record);
     }
 
     // sort
-    std::sort(students.begin(), students.end(), compare_Core_pointers);
+    std::sort(students.begin(), students.end(), Student_info::compare);
 
     // output
     for (vec_size i = 0; i != students.size(); ++i){
-        std::cout << students[i]->name()
-                  << std::string(maxLen + 1 - students[i]->name().size(), ' ');
+        std::cout << students[i].name()
+                  << std::string(maxLen + 1 - students[i].name().size(), ' ');
         try {
-            double final_grade = students[i]->grade(); // Core::grade
+            double final_grade = students[i].grade(); // calls handle's grade which virtually calls appropriate grade()
             std::streamsize prec = std::cout.precision();
             std::cout << std::setprecision(3) << final_grade
                       << std::setprecision(prec) << std::endl;
         } catch (std::domain_error e) {
             std::cout << e.what() << std::endl;
         }
-        delete students[i];
     }
     return 0;
 }

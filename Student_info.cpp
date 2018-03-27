@@ -36,6 +36,8 @@ std::istream& Student_info::read(std::istream& in){
     return in;
 }
 
+
+
     /**********************
     * CORE MEMBER CLASSES *
     ***********************/
@@ -86,12 +88,8 @@ double grade(double midterm, double final, const std::vector<double>& homework){
     return (midterm * 0.2) + (final * 0.4) + (hw_median * 0.4);
 }
 
-bool compare(const Core& c1, const Core& c2){
-    return c1.name() < c2.name();
-}
-
-bool compare_Core_pointers(const Core* cp1, const Core* cp2){
-    return compare(*cp1, *cp2);
+bool compare(const std::string& s1, const std::string& s2){
+    return s1 < s2;
 }
 
 /*bool compare_grades(const Core& c1, const Core& c2){
