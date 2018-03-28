@@ -9,17 +9,14 @@
 // forward declaration of compare
 bool compare(const std::string&, const std::string&);
 
+// Base class
 class Core{
 friend class Student_info;
 public:
-    Core() : midterm(0), final(0) { std::cerr << "Core::Core()" << std::endl; }
-    Core(std::istream& is) {
-        read(is);
-        std::cerr << "Core::Core(istream&)" << std::endl;
-    }
+    Core() : midterm(0), final(0) { }
+    Core(std::istream& is) { read(is); }
 
     std::string name() const { return n; };
-
     virtual std::istream& read(std::istream&);
     virtual double grade() const;
 protected:
@@ -31,13 +28,11 @@ private:
     std::string n;
 };
 
+// Derived class
 class Grad: public Core {
 public:
-    Grad() : thesis(0) { std::cerr << "Grad::Grad()" << std::endl; }
-    Grad(std::istream& is) {
-        read(is);
-        std::cerr << "Grad::Grad(istream&)" << std::endl;
-    }
+    Grad() : thesis(0) { }
+    Grad(std::istream& is) { read(is); }
 
     std::istream& read(std::istream&); // inherits virtual-ness from Core::read()
     double grade() const; // inherits virtual-ness from Core::grade()
@@ -47,7 +42,7 @@ private:
     double thesis;
 };
 
-// handle class
+// Handle class
 class Student_info{
 public:
     Student_info() : cp(0) { }
@@ -64,6 +59,9 @@ public:
     double grade() const{
         if(cp) return cp->grade();
         else throw std::runtime_error("Cannot find grade of uninitialized student");
+    }
+    bool valid() const{
+        return cp->homework.size() != 0;
     }
     static bool compare(const Student_info& s1, const Student_info& s2){
         return ::compare(s1.name(), s2.name());
