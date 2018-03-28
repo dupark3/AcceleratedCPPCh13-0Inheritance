@@ -9,9 +9,9 @@
 // forward declaration of compare
 bool compare(const std::string&, const std::string&);
 
-    /***************************
-    * BASE CORE MEMBER CLASSES *
-    ****************************/
+    /******************
+    * BASE CORE CLASS *
+    *******************/
 
 class Core{
 friend class Student_info;
@@ -23,6 +23,7 @@ public:
     virtual std::istream& read(std::istream&);
     virtual double grade() const;
     virtual bool checkRequirementsMet() const { return homework.size() != 0; }
+    virtual std::string letterGrade() const;
 protected:
     virtual Core* clone() const { return new Core(*this); }
     std::istream& read_common(std::istream&);
@@ -32,9 +33,9 @@ private:
     std::string n;
 };
 
-    /******************************
-    * DERIVED GRAD MEMBER CLASSES *
-    *******************************/
+    /*********************
+    * DERIVED GRAD CLASS *
+    **********************/
 
 class Grad: public Core {
 public:
@@ -50,6 +51,22 @@ private:
     double thesis;
 };
 
+    /**************************
+    * DERIVED PASSFAIL CLASSE *
+    ***************************/
+class PassOrFail: public Core {
+public:
+    PassOrFail() { }
+    PassOrFail(std::istream& is) { read(is); }
+
+    std::istream& read(std::istream&);
+    double grade() const; 
+    bool checkRequirementsMet() const { return (midterm != 0 && final != 0); }
+    std::string letterGrade() const;
+
+protected:
+    PassOrFail* clone() const { return new PassOrFail(*this); }
+};
 
     /*************************************
     * HANDLE STUDENT_INFO MEMBER CLASSES *
@@ -77,7 +94,10 @@ public:
         else throw std::runtime_error("Cannot check uninitialized student");
     }
 
-    std::string letterGrade() const;
+    std::string letterGrade() const{
+        if(cp) return cp->letterGrade();
+        else throw std::runtime_error("Cannot check letter grade of uninitialized student");
+    }
 
     static bool compare(const Student_info& s1, const Student_info& s2){
         return ::compare(s1.name(), s2.name());
@@ -86,9 +106,9 @@ private:
     Core* cp;
 };
 
-    /*********************
-    * NON MEMBER CLASSES *
-    **********************/
+    /**********************************************
+    * NON MEMBER FUNCTIONS AND TEMPLATE FUNCTIONS *
+    ***********************************************/
 bool compare(const std::string&, const std::string&);
 bool compare_grades(const Core&, const Core&);
 double grade(double, double, const std::vector<double>&);

@@ -6,9 +6,9 @@
 
 #include "Student_info.h"
 
-    /***************************
-    * BASE CORE MEMBER CLASSES *
-    ****************************/
+    /*****************************
+    * BASE CORE MEMBER FUNCTIONS *
+    ******************************/
 
 std::istream& Core::read_common(std::istream& in){
     in >> n >> midterm >> final;
@@ -25,9 +25,20 @@ double Core::grade() const{
     return ::grade(midterm, final, homework);
 }
 
-    /******************************
-    * DERIVED GRAD MEMBER CLASSES *
-    *******************************/
+std::string Core::letterGrade() const{
+    static std::string letterGrades[] = {"A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D", "F"};
+    static int gradeBenchMarks[] =      { 97,   92,  90,   87,   82,  80,   77,   72,  70,   60,  0 };
+    static int sizeOfLetterGrades = sizeof(letterGrades) / sizeof(std::string);
+    if (this){
+        double finalGrade = this->grade();
+        for (int i = 0; i != sizeOfLetterGrades; ++i)
+            if (finalGrade >= gradeBenchMarks[i]) return letterGrades[i];
+    } else return "Cannot find letter grade of uninitialized student";
+}
+
+    /********************************
+    * DERIVED GRAD MEMBER FUNCTIONS *
+    *********************************/
 
 std::istream& Grad::read(std::istream& in){
     Core::read_common(in);
@@ -41,10 +52,32 @@ double Grad::grade() const{
     return std::min(Core::grade(), thesis);
 }
 
+    /**************************************
+    * DERIVED PASSORFAIL MEMBER FUNCTIONS *
+    ***************************************/
 
-    /*************************************
-    * HANDLE STUDENT_INFO MEMBER CLASSES *
-    **************************************/
+std::istream& PassOrFail::read(std::istream& in){
+    read_common(in);
+    read_hw(in, homework);
+    return in;
+}
+
+double PassOrFail::grade() const {
+    if (homework.size() != 0)
+        return ::grade(midterm, final, homework);
+    else
+        return (midterm * 0.4) + (final * 0.6);
+}
+
+std::string PassOrFail::letterGrade() const {
+    if (grade() >= 60) return "P";
+    else return "F";
+}
+
+
+    /***************************************
+    * HANDLE STUDENT_INFO MEMBER FUNCTIONS *
+    ****************************************/
 
 Student_info::Student_info(const Student_info& s) : cp(0){
     if (s.cp) cp = s.cp->clone();
@@ -68,23 +101,11 @@ std::istream& Student_info::read(std::istream& in){
     in >> ch;
     if (ch == 'U') cp = new Core(in);
     else if (ch == 'G') cp = new Grad(in);
+    else if (ch == 'P') cp = new PassOrFail(in);
 
     return in;
 }
 
-std::string Student_info::letterGrade() const{
-    static std::string letterGrades[] = {"A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D", "F"};
-    static int gradeBenchMarks[] =      { 97,   92,  90,   87,   82,  80,   77,   72,  70,   65,  0 };
-    static int sizeOfLetterGrades = sizeof(letterGrades) / sizeof(std::string);
-    if (cp){
-        double finalGrade = cp->grade();
-        for (int i = 0; i != sizeOfLetterGrades; ++i)
-            if (finalGrade >= gradeBenchMarks[i]) return letterGrades[i];
-    } else {
-        return "Cannot find letter grade of uninitialized student";
-    }
-
-}
     /*********************
     * NON MEMBER CLASSES *
     **********************/

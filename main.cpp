@@ -18,7 +18,7 @@ typedef std::vector<Core*>::size_type vec_size;
 typedef std::string::size_type string_size;
 
 int main() {
-    std::cout << "Enter each student's status (U or G), name, midterm grade, final grade, and homework grades: " << std::endl;
+    std::cout << "Enter each student's status (U, G, or P), name, midterm grade, final grade, and homework grades: " << std::endl;
 
     // object of the handle class, dynamically allocates, deallocates, and calls virtual functions
     std::vector<Student_info> students;
