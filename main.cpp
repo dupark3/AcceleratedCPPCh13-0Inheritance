@@ -38,14 +38,14 @@ int main() {
     for (vec_size i = 0; i != students.size(); ++i){
         std::cout << students[i].name()
                   << std::string(maxLen + 1 - students[i].name().size(), ' ');
-        if (students[i].valid()){
+        if (students[i].checkRequirementsMet()){
             double final_grade = students[i].grade(); // calls handle's grade which virtually calls appropriate grade()
             std::streamsize prec = std::cout.precision();
             std::cout << std::setprecision(3) << final_grade
                       << std::setprecision(prec) << "  "
                       << students[i].letterGrade() << std::endl;
         } else {
-            std::cout << "Student did not do any homework" << std::endl;
+            std::cout << "Student did not meet the requirements" << std::endl;
         }
     }
     return 0;

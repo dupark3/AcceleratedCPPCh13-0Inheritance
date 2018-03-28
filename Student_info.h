@@ -9,16 +9,20 @@
 // forward declaration of compare
 bool compare(const std::string&, const std::string&);
 
-// Base class
+    /***************************
+    * BASE CORE MEMBER CLASSES *
+    ****************************/
+
 class Core{
 friend class Student_info;
 public:
     Core() : midterm(0), final(0) { }
     Core(std::istream& is) { read(is); }
 
-    std::string name() const { return n; };
+    std::string name() const { return n; }
     virtual std::istream& read(std::istream&);
     virtual double grade() const;
+    virtual bool checkRequirementsMet() const { return homework.size() != 0; }
 protected:
     virtual Core* clone() const { return new Core(*this); }
     std::istream& read_common(std::istream&);
@@ -28,7 +32,10 @@ private:
     std::string n;
 };
 
-// Derived class
+    /******************************
+    * DERIVED GRAD MEMBER CLASSES *
+    *******************************/
+
 class Grad: public Core {
 public:
     Grad() : thesis(0) { }
@@ -36,13 +43,18 @@ public:
 
     std::istream& read(std::istream&); // inherits virtual-ness from Core::read()
     double grade() const; // inherits virtual-ness from Core::grade()
+    bool checkRequirementsMet() const { return (homework.size() != 0 && thesis != 0); }
 protected:
     Grad* clone() const { return new Grad(*this); } // Student_info can access this clone function through a virtual call of Core::clone
 private:
     double thesis;
 };
 
-// Handle class
+
+    /*************************************
+    * HANDLE STUDENT_INFO MEMBER CLASSES *
+    **************************************/
+
 class Student_info{
 public:
     Student_info() : cp(0) { }
@@ -60,11 +72,13 @@ public:
         if(cp) return cp->grade();
         else throw std::runtime_error("Cannot find grade of uninitialized student");
     }
-    bool valid() const{
-        return cp->homework.size() != 0;
+    bool checkRequirementsMet() const{
+        if(cp) return cp->checkRequirementsMet();
+        else throw std::runtime_error("Cannot check uninitialized student");
     }
+
     std::string letterGrade() const;
-    
+
     static bool compare(const Student_info& s1, const Student_info& s2){
         return ::compare(s1.name(), s2.name());
     }
@@ -88,7 +102,7 @@ std::istream& read_hw(std::istream& is, container& c){
             is >> x;
             c.push_back(x);
         }
-            
+
         is.clear();
     }
     return is;
