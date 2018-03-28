@@ -6,9 +6,45 @@
 
 #include "Student_info.h"
 
+    /***************************
+    * BASE CORE MEMBER CLASSES *
+    ****************************/
+
+std::istream& Core::read_common(std::istream& in){
+    in >> n >> midterm >> final;
+    return in;
+}
+
+std::istream& Core::read(std::istream& in){
+    read_common(in);
+    read_hw(in, homework);
+    return in;
+}
+
+double Core::grade() const{
+    return ::grade(midterm, final, homework);
+}
+
     /******************************
-    * STUDENT_INFO MEMBER CLASSES *
+    * DERIVED GRAD MEMBER CLASSES *
     *******************************/
+
+std::istream& Grad::read(std::istream& in){
+    Core::read_common(in);
+    in >> thesis;
+    read_hw(in, homework);
+    return in;
+}
+
+double Grad::grade() const{
+    // grading policy is the minimum between regular grade and thesis grade
+    return std::min(Core::grade(), thesis);
+}
+
+
+    /*************************************
+    * HANDLE STUDENT_INFO MEMBER CLASSES *
+    **************************************/
 
 Student_info::Student_info(const Student_info& s) : cp(0){
     if (s.cp) cp = s.cp->clone();
@@ -36,42 +72,19 @@ std::istream& Student_info::read(std::istream& in){
     return in;
 }
 
+std::string Student_info::letterGrade() const{
+    static std::string letterGrades[] = {"A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D", "F"};
+    static int gradeBenchMarks[] =      { 97,   92,  90,   87,   82,  80,   77,   72,  70,   65,  0 };
+    static int sizeOfLetterGrades = sizeof(letterGrades) / sizeof(std::string);
+    if (cp){
+        double finalGrade = cp->grade();
+        for (int i = 0; i != sizeOfLetterGrades; ++i)
+            if (finalGrade >= gradeBenchMarks[i]) return letterGrades[i];
+    } else {
+        return "Cannot find letter grade of uninitialized student";
+    }
 
-    /**********************
-    * CORE MEMBER CLASSES *
-    ***********************/
-
-std::istream& Core::read_common(std::istream& in){
-    in >> n >> midterm >> final;
-    return in;
 }
-
-std::istream& Core::read(std::istream& in){
-    read_common(in);
-    read_hw(in, homework);
-    return in;
-}
-
-double Core::grade() const{
-    return ::grade(midterm, final, homework);
-}
-
-    /**********************
-    * GRAD MEMBER CLASSES *
-    ***********************/
-
-std::istream& Grad::read(std::istream& in){
-    Core::read_common(in);
-    in >> thesis;
-    read_hw(in, homework);
-    return in;
-}
-
-double Grad::grade() const{
-    // grading policy is the minimum between regular grade and thesis grade
-    return std::min(Core::grade(), thesis);
-}
-
     /*********************
     * NON MEMBER CLASSES *
     **********************/

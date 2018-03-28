@@ -63,10 +63,11 @@ public:
     bool valid() const{
         return cp->homework.size() != 0;
     }
+    std::string letterGrade() const;
+    
     static bool compare(const Student_info& s1, const Student_info& s2){
         return ::compare(s1.name(), s2.name());
     }
-
 private:
     Core* cp;
 };

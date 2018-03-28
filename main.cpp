@@ -21,10 +21,10 @@ int main() {
     std::cout << "Enter each student's status (U or G), name, midterm grade, final grade, and homework grades: " << std::endl;
 
     // object of the handle class, dynamically allocates, deallocates, and calls virtual functions
-    std::vector<Student_info> students; 
-    Student_info record; 
+    std::vector<Student_info> students;
+    Student_info record;
     string_size maxLen = 0;
-    
+
     // call handle's read function, which allocates appropriate object
     while(record.read(std::cin)){
         maxLen = std::max(maxLen, record.name().size());
@@ -37,12 +37,13 @@ int main() {
     // output
     for (vec_size i = 0; i != students.size(); ++i){
         std::cout << students[i].name()
-                      << std::string(maxLen + 1 - students[i].name().size(), ' ');
+                  << std::string(maxLen + 1 - students[i].name().size(), ' ');
         if (students[i].valid()){
             double final_grade = students[i].grade(); // calls handle's grade which virtually calls appropriate grade()
             std::streamsize prec = std::cout.precision();
             std::cout << std::setprecision(3) << final_grade
-                      << std::setprecision(prec) << std::endl;
+                      << std::setprecision(prec) << "  "
+                      << students[i].letterGrade() << std::endl;
         } else {
             std::cout << "Student did not do any homework" << std::endl;
         }
